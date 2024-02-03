@@ -15,6 +15,7 @@ public abstract class AbstractDemo {
     protected final OutputStream outputStream;
 
     public AbstractDemo() {
+
         objectMapper = new ObjectMapper();
         objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         outputStream = new FilterOutputStream(System.out) {
@@ -23,6 +24,14 @@ public abstract class AbstractDemo {
                 flush();
             }
         };
+    }
+
+    protected abstract boolean doDemo();
+
+    public final boolean demo() {
+        try (SubLog4JLogging ignored = SubLog4JLogging.init()) {
+            return doDemo();
+        }
     }
 
     protected void writeJson(ObjectNode json) {
